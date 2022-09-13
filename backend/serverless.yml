@@ -232,6 +232,15 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
+        GlobalSecondaryIndexes:
+          - IndexName: user-todo-${self:provider.environment.TODOS_BY_USER_INDEX}
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: todoId
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
 
     # S3 Bucket
     AttachmentsBucket:
