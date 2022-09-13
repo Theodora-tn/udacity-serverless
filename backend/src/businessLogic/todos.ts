@@ -69,7 +69,7 @@ export async function deleteTodo(userId: string, todoId: string) {
     throw new Error('User is not authorized to delete item')  // FIXME: 403?
   }
 
-  todosAccess.deleteTodoItem(todoId)
+  todosAccess.deleteTodoItem(todoId, userId)
 }
 
 export async function updateAttachmentUrl(userId: string, todoId: string, attachmentId: string) {

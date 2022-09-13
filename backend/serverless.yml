@@ -5,7 +5,8 @@ service: thientnq-udagram
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
-
+  - serverless-offline
+  - serverless-dynamodb-local
 provider:
   name: aws
   runtime: nodejs12.x
@@ -23,6 +24,21 @@ provider:
   tracing:
     lambda: true
     apiGateway: true
+  
+custom:
+  topicName: LocalTopic-${self:provider.stage}
+
+  serverless-offline:
+    httpPort:3100
+
+  dynamodb:
+    stages: 
+      - dev
+    image: openjdk:8-alpine
+    start: 
+      port: 8100
+      inMemory: true
+      migrate: true
 
 functions:
 
@@ -199,19 +215,21 @@ resources:
             AttributeType: S
           - AttributeName: createdAt
             AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
         KeySchema:
-          - AttributeName: todoId
+          - AttributeName: userId
             KeyType: HASH
-          - AttributeName: createdAt
+          - AttributeName: todoId 
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODOS_TABLE}
-        LocalSecondaryIndexes:
+        GlobalSecondaryIndexes:
           - IndexName: ${self:provider.environment.TODOS_BY_USER_INDEX}
             KeySchema:
-              - AttributeName: todoId
+              - AttributeName: userId
                 KeyType: HASH
-              - AttributeName: createdAt
+              - AttributeName: todoId
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL

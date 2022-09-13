@@ -16,9 +16,10 @@ export class TodosAccess {
 
   constructor(
     private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
+    // private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly todosTable = process.env.TODOS_TABLE,
     private readonly todosByUserIndex = process.env.TODOS_BY_USER_INDEX,
-    private readonly bucketName = process.env.ATTACHMENTS_S3_BUCKET
+    // private readonly bucketName = process.env.ATTACHMENTS_S3_BUCKET
   ) {}
 
   async todoItemExists(todoId: string): Promise<boolean> {
@@ -89,13 +90,14 @@ export class TodosAccess {
     }).promise()   
   }
 
-  async deleteTodoItem(todoId: string) {
+  async deleteTodoItem(todoId: string, userId: String) {
     logger.info(`Deleting todo item ${todoId} from ${this.todosTable}`)
 
     await this.docClient.delete({
       TableName: this.todosTable,
       Key: {
-        todoId
+        todoId,
+        userId
       }
     }).promise()    
   }
@@ -114,5 +116,18 @@ export class TodosAccess {
       }
     }).promise()
   }
-
 }
+
+  // function createDynamoDBClient(){
+  //   if(process.env.IS_OFFLINE){
+  //     console.log("create dynamodb instance")
+  //     return new AWS.DynamoDB.DocumentClient({
+  //       region: 'localhost',
+  //       endpoint: 'http://localhost:8100'
+  //     })
+  //   }
+  
+  //   return new AWS.DynamoDB.DocumentClient()
+  // }
+
+
