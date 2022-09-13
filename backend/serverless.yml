@@ -6,7 +6,6 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-offline
-  - serverless-dynamodb-local
 provider:
   name: aws
   runtime: nodejs12.x
@@ -229,7 +228,7 @@ resources:
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
-              - AttributeName: todoId
+              - AttributeName: createdAt
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
