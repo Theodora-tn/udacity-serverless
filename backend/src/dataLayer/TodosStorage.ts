@@ -22,7 +22,7 @@ export class TodosStorage {
     const uploadUrl = this.s3.getSignedUrl('putObject', {
       Bucket: this.bucketName,
       Key: attachmentId,
-      Expires: this.urlExpiration
+      Expires: parseInt(this.urlExpiration)
     })
     return uploadUrl
   }
