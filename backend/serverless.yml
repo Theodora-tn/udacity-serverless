@@ -114,9 +114,6 @@ functions:
           path: todos/{todoId}
           cors: true
           auth: Auth
-          request:
-            schemas:
-              'application/json':  ${file(src/models/updateTodo.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -221,8 +218,6 @@ resources:
         AttributeDefinitions:
           - AttributeName: todoId
             AttributeType: S
-          - AttributeName: createdAt
-            AttributeType: S
           - AttributeName: userId
             AttributeType: S
         KeySchema:
@@ -234,7 +229,7 @@ resources:
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
-              - AttributeName: createdAt
+              - AttributeName: todoId
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
