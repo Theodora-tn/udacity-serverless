@@ -2,8 +2,10 @@ import 'source-map-support/register'
 
 import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
+import { createLogger } from '../utils/logger'
 
 const XAWS = AWSXRay.captureAWS(AWS)
+const logger = createLogger('todosStorage')
 
 export class TodosStorage {
 
@@ -25,6 +27,18 @@ export class TodosStorage {
       Expires: parseInt(this.urlExpiration)
     })
     return uploadUrl
+  }
+
+  async deleteTodoItemAttachment(itemPath: string): Promise<void> {
+    logger.info(`itemPath ${itemPath}`, {itemPath})
+    
+    const params = {
+      'Bucket': this.bucketName,
+      'Key': itemPath
+     };
+  
+    await this.s3.deleteObject(params).promise()
+    
   }
 
 }

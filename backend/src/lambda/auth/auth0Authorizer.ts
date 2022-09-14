@@ -85,10 +85,9 @@ const getSigningKey = async (jwkurl, kid) => {
     });
   const signingKey = signingKeys.find(key => key.kid === kid);
   if(!signingKey){
-    throw new Error('Invalid signing keys')
-    logger.error("No signing keys found")
+    throw new Error('Invalid key')
   }
-  logger.info("Signing keys created successfully ", signingKey)
+  logger.info("Loggin keys created successfully ", signingKey)
   return signingKey
 };
 

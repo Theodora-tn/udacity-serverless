@@ -19,7 +19,6 @@ export class TodosAccess {
     // private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly todosTable = process.env.TODOS_TABLE,
     private readonly todosByUserIndex = process.env.TODOS_BY_USER_INDEX,
-    // private readonly bucketName = process.env.ATTACHMENTS_S3_BUCKET
   ) {}
 
   async todoItemExists(todoId: string): Promise<boolean> {
@@ -90,14 +89,13 @@ export class TodosAccess {
     }).promise()   
   }
 
-  async deleteTodoItem(todoId: string, userId: String) {
+  async deleteTodoItem(todoId: string) {
     logger.info(`Deleting todo item ${todoId} from ${this.todosTable}`)
 
     await this.docClient.delete({
       TableName: this.todosTable,
       Key: {
-        todoId,
-        userId
+        todoId
       }
     }).promise()    
   }

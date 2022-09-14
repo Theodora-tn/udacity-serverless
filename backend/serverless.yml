@@ -6,6 +6,7 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -38,6 +39,7 @@ custom:
       port: 8100
       inMemory: true
       migrate: true
+
 
 functions:
 
@@ -80,6 +82,10 @@ functions:
           path: todos
           cors: true
           auth: Auth
+          request:
+            schemas:
+              'application/json': ${file(src/models/createTodo.json)}
+          
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -108,6 +114,9 @@ functions:
           path: todos/{todoId}
           cors: true
           auth: Auth
+          request:
+            schemas:
+              'application/json':  ${file(src/models/updateTodo.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:

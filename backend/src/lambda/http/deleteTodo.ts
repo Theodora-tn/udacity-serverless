@@ -5,16 +5,23 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } f
 import { deleteTodo } from '../../businessLogic/todos'
 import { createLogger } from '../../utils/logger'
 import { getUserId } from '../utils'
+import { TodosAccess } from '../../dataLayer/TodosAccess'
+
+
 
 const logger = createLogger('deleteTodo')
+const todosAccess = new TodosAccess()
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info('Processing deleteTodo event', { event })
 
   const userId = getUserId(event)
   const todoId = event.pathParameters.todoId
+  const item = await todosAccess.getTodoItem(todoId)
+  const itemKey = item.attachmentUrl
 
-  await deleteTodo(userId, todoId)
+  logger.info(`itemPath in http ${itemKey}`, {itemKey})
+  await deleteTodo(userId,todoId)
 
   return {
     statusCode: 204,

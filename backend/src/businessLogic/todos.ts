@@ -56,7 +56,7 @@ export async function updateTodo(userId: string, todoId: string, updateTodoReque
 }
 
 export async function deleteTodo(userId: string, todoId: string) {
-  logger.info(`Deleting todo ${todoId} for user ${userId}`, { userId, todoId })
+  // logger.info(`Deleting todo ${todoId} for user ${userId}`, { userId, todoId, itemKey })
 
   const item = await todosAccess.getTodoItem(todoId)
 
@@ -66,8 +66,12 @@ export async function deleteTodo(userId: string, todoId: string) {
   if (item.userId !== userId) {
     throw new Error('User is not authorized to delete item')  
   }
+  await todosAccess.deleteTodoItem(todoId)
 
-  todosAccess.deleteTodoItem(todoId, userId)
+  // await Promise.all([
+  //   todosAccess.deleteTodoItem(userId),
+  //   todosStorage.deleteTodoItemAttachment(itemKey)
+  // ]) 
 }
 
 export async function updateAttachmentUrl(userId: string, todoId: string, attachmentId: string) {
